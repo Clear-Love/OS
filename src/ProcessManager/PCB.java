@@ -107,6 +107,7 @@ public class PCB implements Runnable{
         this.remainingTime = burstTime;
         this.waitingTime = 0;
         this.status = ProcessStatus.NEW;
+        this.responseRatio = 1;
     }
 
     // 实现Runnable接口的run()方法
@@ -130,9 +131,13 @@ public class PCB implements Runnable{
         }
 
         // 设置进程状态为TERMINATED 若被优先级更高的进程打断，则设置为READY
-        if(remainingTime == 0)
+        if(remainingTime == 0){
             setStatus(ProcessStatus.TERMINATED);
-        else
+            System.out.println("进程" + this.id + "终止");
+        } else{
             setStatus(ProcessStatus.READY);
+            System.out.println("进程" + this.id + "被其它进程抢夺");
+        }
+
     }
 }

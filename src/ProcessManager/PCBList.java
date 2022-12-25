@@ -1,6 +1,8 @@
 package ProcessManager;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author lmio
@@ -14,6 +16,17 @@ public class PCBList {
 
     public PCBList(List<PCB> pcbList) {
         readyQueue = pcbList;
+        Timer update = new Timer();
+        update.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                // 更新所有进程的等待时间和响应比
+                for (PCB pcb : readyQueue) {
+                    pcb.setWaitingTime(pcb.getWaitingTime() + 1);
+                    pcb.setResponseRatio(((double)pcb.getWaitingTime() + pcb.getBurstTime()) / pcb.getBurstTime());
+                }
+            }
+        }, 0, 500);
     }
 
 
@@ -31,20 +44,21 @@ public class PCBList {
         thread.start();
 
         // 等待进程执行结束或转到就绪
-        while(true){
-            if(pcb.getStatus() == PCB.ProcessStatus.READY){
-                System.out.println("进程" + pcb.getId() + "被中断");
-                break;
-            }
-            if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED){
-                System.out.println("进程" + pcb.getId() + "运行完毕");
-                break;
-            }
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         // 从就绪队列中移除进程
-        if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED)
+        if(pcb.getStatus() == PCB.ProcessStatus.READY){
+            System.out.println("进程" + pcb.getId() + "被中断");
+        }
+        if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED){
+            System.out.println("进程" + pcb.getId() + "运行完毕");
             readyQueue.remove(pcb);
+        }
+
     }
 
 
@@ -63,25 +77,23 @@ public class PCBList {
         Thread thread = new Thread(pcb);
         thread.start();
 
-        while(true){
-            if(start_remainTime - pcb.getRemainingTime() == limit_time){
-                //将进程从cpu中释放
-                pcb.setStatus(PCB.ProcessStatus.BLOCKED);
-                break;
+        Timer waitPBC = new Timer();
+        waitPBC.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                while(true){
+                    if(start_remainTime - pcb.getRemainingTime() == limit_time){
+                        //将进程从cpu中释放
+                        pcb.setStatus(PCB.ProcessStatus.BLOCKED);
+                        break;
+                    }
+                    if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED)
+                        break;
+                }
             }
-            if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED)
-                break;
-        }
-
+        }, 0);
         // 若进程终止从就绪队列中移除进程
         if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED)
             readyQueue.remove(pcb);
-    }
-
-    public void insertProcess(PCB pcb) {
-        // 将进程插入就绪队列中
-        readyQueue.add(pcb);
-        // 设置newProcessInserted变量为true
-        newProcessInserted = true;
     }
 }

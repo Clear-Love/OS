@@ -1,5 +1,8 @@
 package ProcessManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author lmio
  * @version 1.0
@@ -9,6 +12,36 @@ package ProcessManager;
  */
 public class ProcessTest {
     public static void main(String[] args) {
+        PCB pcb1 = new PCB(1, "进程1", 3, 0, 5);
+        PCB pcb2 = new PCB(2, "进程2", 2, 1, 3);
+        PCB pcb3 = new PCB(3, "进程3", 4, 2, 7);
+        PCB pcb4 = new PCB(4, "进程4", 1, 3, 4);
+        PCB pcb5 = new PCB(5, "进程5", 5, 4, 6);
+        PCB pcb6 = new PCB(6, "进程6", 2, 5, 2);
+        PCB pcb7 = new PCB(7, "进程7", 3, 6, 3);
+        PCB pcb8 = new PCB(8, "进程8", 1, 7, 5);
+        PCB pcb9 = new PCB(9, "进程9", 2, 8, 4);
+        PCB pcb10 = new PCB(10, "进程10", 4, 9, 7);
+        List<PCB> pcbList = new ArrayList<>();
+        pcbList.add(pcb1);
+        pcbList.add(pcb2);
+        pcbList.add(pcb3);
+        pcbList.add(pcb4);
+        pcbList.add(pcb5);
+        pcbList.add(pcb6);
+        pcbList.add(pcb7);
+        pcbList.add(pcb8);
+        pcbList.add(pcb9);
+        pcbList.add(pcb10);
+        Scheduler scheduler = new HRRN_Schedule(pcbList);
+        new Thread(scheduler).start();
+        PCB pcb11 = new PCB(11, "进程11", 4, 10, 1);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        scheduler.insertProcess(pcb11);
 
     }
 }
