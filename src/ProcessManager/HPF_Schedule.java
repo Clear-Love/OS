@@ -1,5 +1,6 @@
 package ProcessManager;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  * @description TODO 最高优先级调度算法（抢占式）
  * @modified lmio
  */
-public class HPF_Schedule extends PCBList implements Scheduler, Runnable{
+public class HPF_Schedule extends PCBList implements Scheduler{
 
     public HPF_Schedule(List<PCB> pcbList) {
         super(pcbList);
@@ -41,14 +42,13 @@ public class HPF_Schedule extends PCBList implements Scheduler, Runnable{
     @Override
     public void insertProcess(PCB pcb) {
         int newPriority = pcb.getPriority();
-        if(pcb.getPriority() < readyQueue.get(0).getPriority()){
+        if(newPriority > readyQueue.get(0).getPriority()){
             synchronized (this){
                 //将正在运行的进程转到就绪
                 readyQueue.get(0).setStatus(PCB.ProcessStatus.READY);
                 //插入到队列前面
                 readyQueue.add(0, pcb);
             }
-
         }else {
             //用插入排序使就绪队列重新排序
             for (int i = readyQueue.size()-1; i >= 0; i--) {

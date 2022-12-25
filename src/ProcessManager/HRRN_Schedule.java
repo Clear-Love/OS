@@ -24,6 +24,10 @@ public class HRRN_Schedule extends PCBList implements Scheduler{
         // 循环调度就绪队列中的进程
         while (!readyQueue.isEmpty()) {
             // 找到响应比最高的进程
+            readyQueue.sort((p1, p2) -> (int) (p2.getResponseRatio() - p1.getResponseRatio()));
+            for (PCB pcb : readyQueue) {
+                System.out.print(pcb.getName() + "响应比：" + pcb.getResponseRatio() +"\t");
+            }
             PCB maxPcb = readyQueue.get(0);
 
             PCB_start(maxPcb);
@@ -36,23 +40,13 @@ public class HRRN_Schedule extends PCBList implements Scheduler{
 
     @Override
     public void insertProcess(PCB pcb) {
-        double responseRatio = pcb.getResponseRatio();
-        synchronized (this){
-            double newRatio = pcb.getResponseRatio();
-            if(pcb.getResponseRatio() > readyQueue.get(0).getResponseRatio()){
-                //将正在运行的进程转到就绪
-                readyQueue.get(0).setStatus(PCB.ProcessStatus.READY);
-                //插入到队列前面
-                readyQueue.add(0, pcb);
-            }else {
-                //用插入排序使就绪队列重新排序
-                for (int i = readyQueue.size(); i > 0; i--) {
-                    double ratio = readyQueue.get(i).getResponseRatio();
-                    if(newRatio < ratio){
-                        readyQueue.add(i+1, pcb);
-                    }
-                }
-            }
-        }
+        readyQueue.add(pcb);
+        System.out.println("进程" + pcb.getId() + "插入就绪队列");
+    }
+
+    @Override
+    public void run() {
+        System.out.println("高响应比优先调度器运行");
+        schedule();
     }
 }

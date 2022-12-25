@@ -51,4 +51,15 @@ public class RR_Schedule extends PCBList implements Scheduler{
             System.out.println("当前时间：" + currentTime);
         }
     }
+
+    @Override
+    public void insertProcess(PCB pcb) {
+        readyQueue.add(pcb);
+    }
+
+    @Override
+    public void run() {
+        System.out.println("时间片轮换调度器运行");
+        schedule();
+    }
 }

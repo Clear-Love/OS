@@ -26,4 +26,16 @@ public class FCFS_Schedule extends PCBList implements Scheduler{
             System.out.println("当前时间：" + currentTime);
         }
     }
+
+    @Override
+    public void insertProcess(PCB pcb) {
+        //直接插入到末尾
+        readyQueue.add(pcb);
+    }
+
+    @Override
+    public void run() {
+        System.out.println("先来先服务调度器运行");
+        schedule();
+    }
 }
