@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author lmio
  * @time 2022/12/24 19:09
- * @description TODO
+ * @description TODO 就绪队列
  * @modified lmio
  * @version 1.0
  */
@@ -15,6 +15,7 @@ public class PCBList {
     public PCBList(List<PCB> pcbList) {
         readyQueue = pcbList;
     }
+
 
 
     /**
@@ -42,7 +43,8 @@ public class PCBList {
         }
 
         // 从就绪队列中移除进程
-        readyQueue.remove(pcb);
+        if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED)
+            readyQueue.remove(pcb);
     }
 
 
@@ -74,5 +76,12 @@ public class PCBList {
         // 若进程终止从就绪队列中移除进程
         if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED)
             readyQueue.remove(pcb);
+    }
+
+    public void insertProcess(PCB pcb) {
+        // 将进程插入就绪队列中
+        readyQueue.add(pcb);
+        // 设置newProcessInserted变量为true
+        newProcessInserted = true;
     }
 }

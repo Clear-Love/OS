@@ -31,7 +31,7 @@ class TimeThread extends Thread {
             // 更新所有进程的等待时间和响应比
             for (PCB pcb : processList) {
                 pcb.setWaitingTime(pcb.getWaitingTime() + 1);
-                pcb.setResponseRatio(((double)pcb.getWaitingTime() + pcb.getBurstTime()) / pcb.getBurstTime());
+                pcb.setResponseRatio(((double)pcb.getWaitingTime() + pcb.getPriority()) / pcb.getPriority());
             }
         }
     }

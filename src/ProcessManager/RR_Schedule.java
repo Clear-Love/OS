@@ -1,6 +1,5 @@
 package ProcessManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,8 +36,8 @@ public class RR_Schedule extends PCBList implements Scheduler{
                 //如果该进程在时间片结束前阻塞或结束，则 CPU 立即进行切换；
                 if(remainingSlice - pcb.getRemainingTime() >= 0){
                     PCB_start(pcb);
-                    remainingSlice -= pcb.getBurstTime();
-                    currentTime += pcb.getBurstTime();
+                    remainingSlice -= pcb.getPriority();
+                    currentTime += pcb.getPriority();
                     System.out.println("当前时间：" + currentTime);
                 }else {
                     break;

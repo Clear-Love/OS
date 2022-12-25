@@ -12,7 +12,7 @@ import java.util.List;
 public interface Scheduler {
     /**
      * @author lmio
-     * @description TODO 调度器接口
+     * @description TODO 调度器
      * @time 20:14 2022/12/24
      * @name schedule
      * @returntype void
