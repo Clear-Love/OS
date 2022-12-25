@@ -9,7 +9,7 @@ import java.util.List;
  * @modified lmio
  * @version 1.0
  */
-public interface Scheduler {
+public interface Scheduler extends Runnable{
     /**
      * @author lmio
      * @description TODO 调度器
@@ -18,4 +18,13 @@ public interface Scheduler {
      * @returntype void
      **/
     void schedule();
+
+    /**
+     * @author lmio
+     * @description TODO 插入进程
+     * @time 17:26 2022/12/25
+     * @name insertProcess
+     * @returntype void
+     **/
+    void insertProcess(PCB pcb);
 }
