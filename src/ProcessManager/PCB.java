@@ -11,10 +11,10 @@ package ProcessManager;
 
 public class PCB implements Runnable{
     public static int period = 500;
-    private int id;  // 进程ID
-    private String name;  // 进程名称
+    private final int id;  // 进程ID
+    private final String name;  // 进程名称
     private int priority;  // 进程优先级
-    private int arrivalTime;  // 进程到达时间
+    private final int arrivalTime;  // 进程到达时间
     private int burstTime;  // 进程需要的时间片
     private int remainingTime;  // 进程剩余的时间片
     private int waitingTime;  // 进程等待时间
@@ -25,12 +25,11 @@ public class PCB implements Runnable{
     public enum ProcessStatus {
         NEW, READY, RUNNING, BLOCKED, TERMINATED
     }
-
-    public void setStatus(ProcessStatus status) {
+    public synchronized void setStatus(ProcessStatus status) {
         this.status = status;
     }
 
-    public ProcessStatus getStatus() {
+    public synchronized ProcessStatus getStatus() {
         return status;
     }
 
@@ -38,17 +37,10 @@ public class PCB implements Runnable{
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public int getPriority() {
         return priority;
@@ -62,15 +54,12 @@ public class PCB implements Runnable{
         return arrivalTime;
     }
 
-    public void setArrivalTime(int arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
 
     public int getBurstTime() {
         return burstTime;
     }
 
-    public void setBurstTime(int burstTime) {
+    public synchronized void setBurstTime(int burstTime) {
         this.burstTime = burstTime;
     }
 
@@ -78,15 +67,12 @@ public class PCB implements Runnable{
         return remainingTime;
     }
 
-    public void setRemainingTime(int remainingTime) {
-        this.remainingTime = remainingTime;
-    }
 
     public int getWaitingTime() {
         return waitingTime;
     }
 
-    public void setWaitingTime(int waitingTime) {
+    public void  setWaitingTime(int waitingTime) {
         this.waitingTime = waitingTime;
     }
 
