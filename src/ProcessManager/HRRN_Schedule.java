@@ -1,6 +1,6 @@
 package ProcessManager;
 
-import java.util.List;
+import java.util.Vector;
 
 /**
  * @author lmio
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class HRRN_Schedule extends PCBList implements Scheduler{
 
-    public HRRN_Schedule(List<PCB> pcbList) {
+    public HRRN_Schedule(Vector<PCB> pcbList) {
         super(pcbList);
         readyQueue.sort((p1, p2) -> (int) (p2.getResponseRatio() - p1.getResponseRatio()));
     }
@@ -24,7 +24,12 @@ public class HRRN_Schedule extends PCBList implements Scheduler{
         // 循环调度就绪队列中的进程
         while (!readyQueue.isEmpty()) {
             // 找到响应比最高的进程
-            readyQueue.sort((p1, p2) -> (int) (p2.getResponseRatio() - p1.getResponseRatio()));
+            readyQueue.sort((p1, p2) -> {
+                if(p2.getResponseRatio() - p1.getResponseRatio() > 0){
+                    return 1;
+                }
+                return -1;
+            });
             for (PCB pcb : readyQueue) {
                 System.out.print(pcb.getName() + "响应比：" + pcb.getResponseRatio() +"\t");
             }

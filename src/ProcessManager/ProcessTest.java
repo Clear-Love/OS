@@ -1,7 +1,6 @@
 package ProcessManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 
 /**
  * @author lmio
@@ -12,6 +11,34 @@ import java.util.List;
  */
 public class ProcessTest {
     public static void main(String[] args) {
+//        schedule_start(new HPF_Schedule(newPCBlist()));
+//        schedule_start(new FCFS_Schedule(newPCBlist()));
+//        schedule_start(new HRRN_Schedule(newPCBlist()));
+//        schedule_start(new RR_Schedule(newPCBlist()));
+//        schedule_start(new SJF_Schedule(newPCBlist()));
+        schedule_start(new MFQ_Schedule(newPCBlist()));
+
+    }
+
+    public static void schedule_start(Scheduler sd) {
+        Thread th = new Thread(sd);
+        th.setDaemon(true);
+        th.start();
+        PCB pcb11 = new PCB(11, "进程11", 6, 10, 1);
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        sd.insertProcess(pcb11);
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Vector<PCB> newPCBlist() {
         PCB pcb1 = new PCB(1, "进程1", 3, 0, 5);
         PCB pcb2 = new PCB(2, "进程2", 2, 1, 3);
         PCB pcb3 = new PCB(3, "进程3", 4, 2, 7);
@@ -22,7 +49,7 @@ public class ProcessTest {
         PCB pcb8 = new PCB(8, "进程8", 1, 7, 5);
         PCB pcb9 = new PCB(9, "进程9", 2, 8, 4);
         PCB pcb10 = new PCB(10, "进程10", 4, 9, 7);
-        List<PCB> pcbList = new ArrayList<>();
+        Vector<PCB> pcbList = new Vector<>();
         pcbList.add(pcb1);
         pcbList.add(pcb2);
         pcbList.add(pcb3);
@@ -33,14 +60,6 @@ public class ProcessTest {
         pcbList.add(pcb8);
         pcbList.add(pcb9);
         pcbList.add(pcb10);
-        Scheduler scheduler = new RR_Schedule(pcbList);
-        new Thread(scheduler).start();
-        PCB pcb11 = new PCB(11, "进程11", 4, 10, 1);
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        scheduler.insertProcess(pcb11);
+        return pcbList;
     }
 }

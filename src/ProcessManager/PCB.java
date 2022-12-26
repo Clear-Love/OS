@@ -10,6 +10,7 @@ package ProcessManager;
 
 
 public class PCB implements Runnable{
+    public static int period = 500;
     private int id;  // 进程ID
     private String name;  // 进程名称
     private int priority;  // 进程优先级
@@ -121,7 +122,7 @@ public class PCB implements Runnable{
             // 模拟进程执行，休眠1秒
             System.out.println("进程" + id + "正在运行");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(period);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

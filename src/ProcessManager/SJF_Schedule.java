@@ -1,7 +1,7 @@
 package ProcessManager;
 
 import java.util.Comparator;
-import java.util.List;
+import java.util.Vector;
 
 /**
  * @author lmio
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class SJF_Schedule extends PCBList implements Scheduler{
 
-    public SJF_Schedule(List<PCB> pcbList) {
+    public SJF_Schedule(Vector<PCB> pcbList) {
         super(pcbList);
         readyQueue.sort(Comparator.comparingInt(PCB::getBurstTime));
     }

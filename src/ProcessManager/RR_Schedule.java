@@ -1,8 +1,8 @@
 package ProcessManager;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 /**
  * @author lmio
@@ -26,7 +26,7 @@ public class RR_Schedule extends PCBList implements Scheduler{
     //一个定时触发的任务
     Timer interrupt;
 
-    public RR_Schedule(List<PCB> pcbList) {
+    public RR_Schedule(Vector<PCB> pcbList) {
         super(pcbList);
         interrupt = new Timer(true);
     }
@@ -49,19 +49,16 @@ public class RR_Schedule extends PCBList implements Scheduler{
                 }
 
             }
-        },0, timeSlice* 1000L);
-
+        },0, timeSlice* 500L);
         // 循环调度就绪队列中的进程
         while (!readyQueue.isEmpty()) {
             // 取出就绪队列中的第一个进程
-            int remainingSlice = timeSlice;
-
             PCB pcb = readyQueue.get(0);
 
             //开启进程
             PCB_start(pcb);
 
-            currentTime += remainingSlice;
+            currentTime += pcb.getBurstTime() - pcb.getRemainingTime();
             System.out.println("当前时间：" + currentTime);
         }
         System.out.println("时间片轮换调度算法演示结束");
@@ -70,6 +67,7 @@ public class RR_Schedule extends PCBList implements Scheduler{
 
     @Override
     public void insertProcess(PCB pcb) {
+        System.out.println("进程" + pcb.getId() + "插入");
         readyQueue.add(pcb);
     }
 

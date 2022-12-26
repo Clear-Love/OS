@@ -1,8 +1,8 @@
 package ProcessManager;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 /**
  * @author lmio
@@ -12,21 +12,23 @@ import java.util.TimerTask;
  * @version 1.0
  */
 public class PCBList {
-    public final  List<PCB> readyQueue;
+    public final Vector<PCB> readyQueue;
 
-    public PCBList(List<PCB> pcbList) {
+    public PCBList(Vector<PCB> pcbList) {
         readyQueue = pcbList;
-        Timer update = new Timer();
+        Timer update = new Timer(true);
         update.schedule(new TimerTask() {
             @Override
             public void run() {
                 // 更新所有进程的等待时间和响应比
-                for (PCB pcb : readyQueue) {
-                    pcb.setWaitingTime(pcb.getWaitingTime() + 1);
-                    pcb.setResponseRatio(((double)pcb.getWaitingTime() + pcb.getBurstTime()) / pcb.getBurstTime());
+                synchronized (readyQueue){
+                    for (PCB pcb : readyQueue) {
+                        pcb.setWaitingTime(pcb.getWaitingTime() + 1);
+                        pcb.setResponseRatio(((double) pcb.getWaitingTime() + pcb.getBurstTime()) / pcb.getBurstTime());
+                    }
                 }
             }
-        }, 0, 500);
+        }, 0, PCB.period);
     }
 
 
@@ -41,6 +43,7 @@ public class PCBList {
     public void PCB_start(PCB pcb){
         // 启动进程
         Thread thread = new Thread(pcb);
+        thread.setDaemon(true);
         thread.start();
 
         // 等待进程执行结束或转到就绪

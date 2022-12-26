@@ -1,7 +1,6 @@
 package ProcessManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 
 /**
  * @author lmio
@@ -12,19 +11,22 @@ import java.util.List;
  */
 public class FCFS_Schedule extends PCBList implements Scheduler{
 
-    public FCFS_Schedule(List<PCB> pcbList) {
+    public FCFS_Schedule(Vector<PCB> pcbList) {
         super(pcbList);
     }
 
     @Override
     public void schedule() {
         int currentTime = 0;
+
         // 遍历就绪队列中的所有进程
-        for (PCB pcb : readyQueue) {
-            // 启动进程
+        while(!readyQueue.isEmpty()){
+            PCB pcb = readyQueue.get(0);
             PCB_start(pcb);
+            currentTime += pcb.getBurstTime() - pcb.getRemainingTime();
             System.out.println("当前时间：" + currentTime);
         }
+
         System.out.println("先来先服务调度算法演示结束");
         System.out.println("-------------------------------------");
     }

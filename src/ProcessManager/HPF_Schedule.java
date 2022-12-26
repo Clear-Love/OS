@@ -1,7 +1,6 @@
 package ProcessManager;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.Vector;
 
 /**
  * @author lmio
@@ -12,7 +11,7 @@ import java.util.List;
  */
 public class HPF_Schedule extends PCBList implements Scheduler{
 
-    public HPF_Schedule(List<PCB> pcbList) {
+    public HPF_Schedule(Vector<PCB> pcbList) {
         super(pcbList);
         readyQueue.sort((p1, p2) -> p2.getPriority() - p1.getPriority());
     }
@@ -28,7 +27,6 @@ public class HPF_Schedule extends PCBList implements Scheduler{
             // 找到优先级最高的进程
 
             PCB pcb = readyQueue.get(0);
-            int shortestTime = pcb.getPriority();
 
             // 启动进程
             PCB_start(pcb);
@@ -43,6 +41,7 @@ public class HPF_Schedule extends PCBList implements Scheduler{
 
     @Override
     public void insertProcess(PCB pcb) {
+        System.out.println("进程" + pcb.getId() + "插入");
         int newPriority = pcb.getPriority();
         if(newPriority > readyQueue.get(0).getPriority()){
             synchronized (this){
