@@ -37,6 +37,8 @@ public class HPF_Schedule extends PCBList implements Scheduler{
             currentTime += pcb.getBurstTime() - pcb.getRemainingTime();
             System.out.println("当前时间：" + currentTime);
         }
+        System.out.println("高优先级调度算法演示结束");
+        System.out.println("-------------------------------------");
     }
 
     @Override

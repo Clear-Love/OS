@@ -61,39 +61,4 @@ public class PCBList {
 
     }
 
-
-    /**
-     * @author lmio
-     * @description TODO 在固定的时间内运行一个进程，如果时间片用完，进程还在运行，那么将会把此进程从 CPU 释放出来
-     * @time 19:53 2022/12/24
-     * @name PCB_start
-     * @returntype void
-     **/
-    public void PCB_start(PCB pcb, int limit_time){
-
-        int start_remainTime = pcb.getRemainingTime();
-
-        // 启动进程
-        Thread thread = new Thread(pcb);
-        thread.start();
-
-        Timer waitPBC = new Timer();
-        waitPBC.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                while(true){
-                    if(start_remainTime - pcb.getRemainingTime() == limit_time){
-                        //将进程从cpu中释放
-                        pcb.setStatus(PCB.ProcessStatus.BLOCKED);
-                        break;
-                    }
-                    if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED)
-                        break;
-                }
-            }
-        }, 0);
-        // 若进程终止从就绪队列中移除进程
-        if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED)
-            readyQueue.remove(pcb);
-    }
 }

@@ -33,7 +33,7 @@ public class ProcessTest {
         pcbList.add(pcb8);
         pcbList.add(pcb9);
         pcbList.add(pcb10);
-        Scheduler scheduler = new HRRN_Schedule(pcbList);
+        Scheduler scheduler = new RR_Schedule(pcbList);
         new Thread(scheduler).start();
         PCB pcb11 = new PCB(11, "进程11", 4, 10, 1);
         try {
@@ -42,6 +42,5 @@ public class ProcessTest {
             e.printStackTrace();
         }
         scheduler.insertProcess(pcb11);
-
     }
 }

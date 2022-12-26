@@ -36,6 +36,9 @@ public class HRRN_Schedule extends PCBList implements Scheduler{
             currentTime += maxPcb.getPriority();
             System.out.println("当前时间：" + currentTime);
         }
+
+        System.out.println("高响应比优先算法演示结束");
+        System.out.println("-------------------------------------");
     }
 
     @Override
