@@ -13,6 +13,8 @@ public class MFQ_Schedule extends PCBList implements Scheduler{
     //队列数，默认为3
     private int levelNum = 3;
     private final List<PCBlevelQueue> queues;
+
+    private PCB now;
     Timer interrupt;
     public int getLevelNum() {
         return levelNum;
@@ -72,10 +74,9 @@ public class MFQ_Schedule extends PCBList implements Scheduler{
                 public void run() {
                     if(!readyQueue.isEmpty()){
                         //终止正在运行的进程并把它添加到就绪队列的末尾
-                        PCB pcb = readyQueue.get(0);
-                            pcb.setStatus(PCB.ProcessStatus.READY);
-                            readyQueue.remove(0);
-                            readyQueue.add(pcb);
+                        now.setStatus(PCB.ProcessStatus.READY);
+                        readyQueue.remove(0);
+                        readyQueue.add(now);
                     }
 
                 }
@@ -84,19 +85,19 @@ public class MFQ_Schedule extends PCBList implements Scheduler{
             // 循环调度就绪队列中的进程
             while (!queue.isEmpty()) {
                 // 取出就绪队列中的第一个进程
-                PCB pcb = queue.peek();
+                now = queue.peek();
 
                 //开启进程
-                PCB_start(pcb);
+                PCB_start(now);
 
                 queue.poll();
-                if(pcb.getStatus() == PCB.ProcessStatus.READY){
+                if(now.getStatus() == PCB.ProcessStatus.READY){
                     //若在固定时间片内未完成，添加到下一级的末尾
-                    System.out.println("进程" + pcb.getId() + "未在固定的时间片内完成，加入下级队列");
-                    queues.get(levelq.level+1 == levelNum ? levelNum:levelq.level+1).pcbqueue.add(pcb);
+                    System.out.println("进程" + now.getId() + "未在固定的时间片内完成，加入下级队列");
+                    queues.get(levelq.level+1 == levelNum ? levelNum:levelq.level+1).pcbqueue.add(now);
                 }
 
-                currentTime += pcb.getBurstTime() - pcb.getRemainingTime();
+                currentTime += now.getBurstTime() - now.getRemainingTime();
                 System.out.println("当前时间：" + currentTime);
             }
             interrupt.cancel();
