@@ -11,11 +11,11 @@ import java.util.Vector;
  */
 public class ProcessTest {
     public static void main(String[] args) {
-//        schedule_start(new HPF_Schedule(newPCBlist()));
-//        schedule_start(new FCFS_Schedule(newPCBlist()));
-//        schedule_start(new HRRN_Schedule(newPCBlist()));
-//        schedule_start(new RR_Schedule(newPCBlist()));
-//        schedule_start(new SJF_Schedule(newPCBlist()));
+        schedule_start(new HPF_Schedule(newPCBlist()));
+        schedule_start(new FCFS_Schedule(newPCBlist()));
+        schedule_start(new HRRN_Schedule(newPCBlist()));
+        schedule_start(new RR_Schedule(newPCBlist()));
+        schedule_start(new SJF_Schedule(newPCBlist()));
         schedule_start(new MFQ_Schedule(newPCBlist()));
 
     }
