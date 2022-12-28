@@ -1,4 +1,4 @@
-package MemoryManager;
+package MemoryAllocte;
 
 import java.util.LinkedList;
 
