@@ -9,7 +9,7 @@ import java.util.Vector;
  * @description TODO 最高优先级调度算法（抢占式）
  * @modified lmio
  */
-public class HPF_Schedule extends PCBList implements Scheduler{
+public class HPF_Schedule extends Scheduler{
 
     public HPF_Schedule(Vector<PCB> pcbList) {
         super(pcbList);

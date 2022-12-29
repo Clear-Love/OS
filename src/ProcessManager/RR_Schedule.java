@@ -11,7 +11,7 @@ import java.util.Vector;
  * @modified lmio
  * @version 1.0
  */
-public class RR_Schedule extends PCBList implements Scheduler{
+public class RR_Schedule extends Scheduler{
 
     private int timeSlice = 4;
 

@@ -9,7 +9,7 @@ import java.util.Vector;
  * @description TODO 高响应比优先算法
  * @modified lmio
  */
-public class HRRN_Schedule extends PCBList implements Scheduler{
+public class HRRN_Schedule extends Scheduler{
 
     public HRRN_Schedule(Vector<PCB> pcbList) {
         super(pcbList);

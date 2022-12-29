@@ -10,7 +10,7 @@ import java.util.Vector;
  * @modified lmio
  * @version 2.0
  */
-public class SJF_Schedule extends PCBList implements Scheduler{
+public class SJF_Schedule extends Scheduler{
 
     public SJF_Schedule(Vector<PCB> pcbList) {
         super(pcbList);

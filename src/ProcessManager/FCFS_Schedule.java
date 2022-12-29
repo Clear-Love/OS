@@ -9,7 +9,7 @@ import java.util.Vector;
  * @modified lmio
  * @version 1.0
  */
-public class FCFS_Schedule extends PCBList implements Scheduler{
+public class FCFS_Schedule extends Scheduler{
 
     public FCFS_Schedule(Vector<PCB> pcbList) {
         super(pcbList);

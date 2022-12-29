@@ -9,7 +9,7 @@ import java.util.*;
  * @description TODO 多级反馈队列调度算法
  * @modified lmio
  */
-public class MFQ_Schedule extends PCBList implements Scheduler{
+public class MFQ_Schedule extends  Scheduler{
     //队列数，默认为3
     private int levelNum = 3;
     private final List<PCBlevelQueue> queues;
