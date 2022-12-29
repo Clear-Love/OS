@@ -19,7 +19,7 @@ public class PCB implements Runnable{
     private int remainingTime;  // 进程剩余的时间片
     private int waitingTime;  // 进程等待时间
     private ProcessStatus status;  // 进程状态
-    private double responseRatio;
+    private double responseRatio; //进程响应比
 
     // 定义进程状态的枚举类型
     public enum ProcessStatus {
