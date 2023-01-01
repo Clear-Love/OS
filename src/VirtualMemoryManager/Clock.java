@@ -6,7 +6,7 @@ import java.util.LinkedList;
  * @author lmio
  * @version 1.0
  * @time 2022/12/29 0:56
- * @description TODO
+ * @description TODO 时钟调度算法
  * @modified lmio
  */
 public class Clock extends VirtualMemoryManager{
