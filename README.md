@@ -34,4 +34,6 @@
 **输入**：磁道服务顺序从指定的文本文件（TXT文件）中取出。
 **输出**：第一行：磁道的服务顺序；第二行：显示移动总道数。
 
-***文章参考：*** [大厂面试爱问的「调度算法」，20 张图一举拿下](https://www.cnblogs.com/xiaolincoding/p/13631224.html)
+***文章参考：*** 
+- [大厂面试爱问的「调度算法」，20 张图一举拿下](https://www.cnblogs.com/xiaolincoding/p/13631224.html)  
+- [操作系统——动态分区分配算法（详解）](https://blog.csdn.net/weixin_44827418/article/details/106240300)
