@@ -36,12 +36,10 @@ public class AllocatorMenu {
 
     private static void fixedPartitionMenu() {
         int choice;
-        FixedPartitionMemoryAllocator fixedAllocator = new FixedPartitionMemoryAllocator();
+        FixedPartitionMemoryAllocator fixedAllocator = new FixedPartitionMemoryAllocator(128);
         fixedAllocator.allocate(10, "1");
         fixedAllocator.allocate(20, "2");
         fixedAllocator.allocate(30, "3");
-        fixedAllocator.allocate(40, "4");
-        fixedAllocator.allocate(50, "5");
         while (true){
             System.out.print("固定分区菜单：");
             choice = menuChoice();
@@ -52,7 +50,11 @@ public class AllocatorMenu {
                 // 调用固定分区中释放空间的函数
                 case 2 -> FreeBlock(fixedAllocator);
 
-                case 3 -> fixedAllocator.show();
+                case 3 -> {
+                    fixedAllocator.showFreeMemory();
+                    fixedAllocator.showAllocatedMemory();
+                }
+
                 case 4 -> mainMenu();
                 case 0 -> System.exit(0);
                 default -> {
@@ -74,7 +76,27 @@ public class AllocatorMenu {
 
     private static void variablePartitionMenu() {
         int choice;
-        VariableMemoryAllocator varAllocator = new VariableMemoryAllocator(128);
+        variableMemoryAllocate varAllocator;
+        System.out.println("请选择使用的算法");
+        System.out.print("1. 首次适应算法（First Fit）\t");
+        System.out.print("2. 最佳适应算法（Best Fit）\t");
+        System.out.print("3. 最坏适应算法(Worst Fit)\t");
+        System.out.println("4. 邻近适应算法（Next Fit）");
+        System.out.print("请输入选择：");
+        choice = sc.nextInt();
+        switch (choice) {
+            // 调用可变分区中分配空间的函数
+            case 1 -> varAllocator = new FF_MemoryAllocator(128);
+            // 调用可变分区中释放空间的函数
+            case 2 -> varAllocator = new BF_MemoryAllocator(128);
+            case 3 -> varAllocator = new WF_MemoryAllocator(128);
+            case 4 -> varAllocator = new NF_MemoryAllocator(128);
+            default -> {
+                System.out.println("无效的选择，请重试。");
+                variablePartitionMenu();
+                return;
+            }
+        }
         varAllocator.allocate(10, "1");
         varAllocator.allocate(20, "2");
         varAllocator.allocate(30, "3");

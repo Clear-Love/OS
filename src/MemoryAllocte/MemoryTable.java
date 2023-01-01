@@ -25,29 +25,13 @@ public class MemoryTable{
     public void show(){
         if(!blocks.isEmpty()){
             System.out.println("[" + name +"]");
-            System.out.println("进程名称\t起始地址\t内存块大小\t是否分配");
+            System.out.println("进程名称\t起始地址\t内存块大小");
         }else {
             System.out.println(name + "为空");
         }
         for (MemoryBlock block : blocks) {
-
             System.out.println(block);
         }
-    }
-
-    //插入一个新地址块
-    public void insert_sort(MemoryBlock block){
-        ListIterator<MemoryBlock> it = blocks.listIterator();
-        while (it.hasNext()) {
-            //已经实现了比较器，若地址小于next的地址，则在这个位置插入
-            if (block.compareTo(it.next()) < 0) {
-                System.out.println("将内存块:" + block + "放入未分配表");
-                it.previous();
-                it.add(block);
-                return;
-            }
-        }
-        blocks.add(block);
     }
 
     public void insert(MemoryBlock block){
@@ -60,7 +44,6 @@ public class MemoryTable{
         while (it.hasNext()) {
             MemoryBlock block = it.next();
             if (block.equals(mb)) {
-                System.out.println("将内存块:" + block + "从分配表释放");
                 it.remove();
                 return ;
             }
@@ -72,7 +55,6 @@ public class MemoryTable{
         while (it.hasNext()) {
             MemoryBlock block = it.next();
             if (block.getWorkName().equals(name)) {
-                System.out.println("将内存块:" + block + "从分配表释放");
                 it.remove();
                 return block;
             }
