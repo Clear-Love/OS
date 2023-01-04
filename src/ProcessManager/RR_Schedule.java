@@ -35,8 +35,6 @@ public class RR_Schedule extends Scheduler{
     // 实现Scheduler接口的schedule()方法
     @Override
     public void schedule() {
-        // 定义当前时间
-        int currentTime = 0;
         interrupt.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -51,24 +49,16 @@ public class RR_Schedule extends Scheduler{
             }
         },0, timeSlice* 500L);
         // 循环调度就绪队列中的进程
-        while (!readyQueue.isEmpty()) {
+        while (true) {
+            waitReadyQueue();
             // 取出就绪队列中的第一个进程
             PCB pcb = readyQueue.get(0);
 
             //开启进程
             PCB_start(pcb);
 
-            currentTime += pcb.getBurstTime() - pcb.getRemainingTime();
             System.out.println("当前时间：" + currentTime);
         }
-        System.out.println("时间片轮换调度算法演示结束");
-        System.out.println("-------------------------------------");
-    }
-
-    @Override
-    public void insertProcess(PCB pcb) {
-        System.out.println("进程" + pcb.getId() + "插入");
-        readyQueue.add(pcb);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ProcessManager;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Vector;
 
@@ -14,25 +15,23 @@ public class SJF_Schedule extends Scheduler{
 
     public SJF_Schedule(Vector<PCB> pcbList) {
         super(pcbList);
+        // 按作业长度从小到大排序
         readyQueue.sort(Comparator.comparingInt(PCB::getBurstTime));
     }
 
     // 实现Scheduler接口的schedule()方法
     @Override
     public void schedule() {
-        // 定义当前时间
-        int currentTime = 0;
-
         // 循环调度就绪队列中的进程
-        while (!readyQueue.isEmpty()) {
+        while (true) {
+            waitReadyQueue();
+
             // 找到周期最短的进程
             PCB pcb = readyQueue.get(0);
 
             // 启动进程
             PCB_start(pcb);
 
-            // 更新当前时间
-            currentTime += pcb.getBurstTime() - pcb.getRemainingTime();
             System.out.println("当前时间：" + currentTime);
         }
     }
@@ -41,19 +40,28 @@ public class SJF_Schedule extends Scheduler{
     public void insertProcess(PCB pcb) {
         System.out.println("进程" + pcb.getId() + "插入");
         int newTime = pcb.getBurstTime();
+        // 若就绪队列为空 直接插入到队列末尾
+        if(readyQueue.isEmpty()){
+            addPCB(pcb);
+            return;
+        }
         if(newTime < readyQueue.get(0).getBurstTime()){
-            synchronized (this){
-                //将正在运行的进程转到就绪
-                readyQueue.get(0).setStatus(PCB.ProcessStatus.READY);
-                //插入到队列前面
+            //将正在运行的进程转到就绪
+            readyQueue.get(0).setStatus(PCB.ProcessStatus.READY);
+            synchronized (readyQueue){
                 readyQueue.add(0, pcb);
+                readyQueue.notify();
             }
         }else {
             //用插入排序使就绪队列重新排序
             for (int i = readyQueue.size()-1; i >= 0; i--) {
                 int time = readyQueue.get(i).getBurstTime();
                 if(newTime > time){
-                    readyQueue.add(i+1, pcb);
+                    synchronized (readyQueue){
+                        readyQueue.add(i, pcb);
+                        readyQueue.notify();
+                        return;
+                    }
                 }
             }
         }

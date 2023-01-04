@@ -1,5 +1,6 @@
 package ProcessManager;
 
+import java.util.Comparator;
 import java.util.Vector;
 
 /**
@@ -17,24 +18,14 @@ public class FCFS_Schedule extends Scheduler{
 
     @Override
     public void schedule() {
-        int currentTime = 0;
-
+        readyQueue.sort(Comparator.comparingInt(PCB::getArrivalTime));
         // 遍历就绪队列中的所有进程
-        while(!readyQueue.isEmpty()){
+        while(true){
+            waitReadyQueue();
             PCB pcb = readyQueue.get(0);
             PCB_start(pcb);
-            currentTime += pcb.getBurstTime() - pcb.getRemainingTime();
             System.out.println("当前时间：" + currentTime);
         }
-
-        System.out.println("先来先服务调度算法演示结束");
-        System.out.println("-------------------------------------");
-    }
-
-    @Override
-    public void insertProcess(PCB pcb) {
-        //直接插入到末尾
-        readyQueue.add(pcb);
     }
 
     @Override

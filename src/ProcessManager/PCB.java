@@ -10,7 +10,7 @@ package ProcessManager;
 
 
 public class PCB implements Runnable{
-    public static int period = 500;
+    public static int period = 500; //无实际作用，用于模拟进程运行的等待时间，进程信息的更新周期
     private final int id;  // 进程ID
     private final String name;  // 进程名称
     private int priority;  // 进程优先级
@@ -126,5 +126,13 @@ public class PCB implements Runnable{
             System.out.println("进程" + this.id + "被其它进程抢夺");
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "PCB{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

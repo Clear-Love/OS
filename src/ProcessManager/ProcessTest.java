@@ -1,6 +1,6 @@
 package ProcessManager;
 
-import java.util.Vector;
+import java.util.*;
 
 /**
  * @author lmio
@@ -9,28 +9,41 @@ import java.util.Vector;
  * @description TODO 测试各种进程调用算法
  * @modified lmio
  */
+
+
+
 public class ProcessTest {
     public static void main(String[] args) {
-        schedule_start(new HPF_Schedule(newPCBlist()));
-        schedule_start(new FCFS_Schedule(newPCBlist()));
-        schedule_start(new HRRN_Schedule(newPCBlist()));
-        schedule_start(new RR_Schedule(newPCBlist()));
-        schedule_start(new SJF_Schedule(newPCBlist()));
-        schedule_start(new MFQ_Schedule(newPCBlist()));
+
+        schedule_start(new FCFS_Schedule(new Vector<>()));
+//        schedule_start(new HPF_Schedule(new Vector<>()));
+//        schedule_start(new HRRN_Schedule(new Vector<>()));
+//        schedule_start(new RR_Schedule(new Vector<>()));
+//        schedule_start(new SJF_Schedule(new Vector<>()));
+//        schedule_start(new MFQ_Schedule(new Vector<>()));
 
     }
 
     public static void schedule_start(Scheduler sd) {
+        Vector<PCB> newList =  newPCBlist();
         Thread th = new Thread(sd);
         th.setDaemon(true);
         th.start();
-        PCB pcb11 = new PCB(11, "进程11", 6, 10, 1);
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        sd.insertProcess(pcb11);
+        Timer insertPCB = new Timer(true);
+        insertPCB.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Iterator<PCB> it = newList.iterator();
+                while (it.hasNext()){
+                    PCB pcb = it.next();
+                    if(sd.currentTime >= pcb.getArrivalTime()){
+                        sd.insertProcess(pcb);
+                        it.remove();
+                    }
+                }
+            }
+        }, 0, PCB.period);
+
         try {
             th.join();
         } catch (InterruptedException e) {
@@ -49,6 +62,7 @@ public class ProcessTest {
         PCB pcb8 = new PCB(8, "进程8", 1, 7, 5);
         PCB pcb9 = new PCB(9, "进程9", 2, 8, 4);
         PCB pcb10 = new PCB(10, "进程10", 4, 9, 7);
+        PCB pcb11 = new PCB(11, "进程11", 6, 12, 6);
         Vector<PCB> pcbList = new Vector<>();
         pcbList.add(pcb1);
         pcbList.add(pcb2);
@@ -60,6 +74,8 @@ public class ProcessTest {
         pcbList.add(pcb8);
         pcbList.add(pcb9);
         pcbList.add(pcb10);
+        pcbList.add(pcb11);
         return pcbList;
     }
+
 }

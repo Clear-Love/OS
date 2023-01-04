@@ -7,15 +7,18 @@ import java.util.Vector;
 /**
  * @author lmio
  * @time 2022/12/24 13:38
- * @description TODO 一个调度器的接口，用于实现各种进程调度
+ * @description TODO 一个调度器的抽象类，用于实现各种进程调度
  * @modified lmio
  * @version 1.0
  */
 public abstract class Scheduler implements Runnable{
     public final Vector<PCB> readyQueue;
 
+    public int currentTime;
+
     public Scheduler(Vector<PCB> pcbList) {
         readyQueue = pcbList;
+        currentTime = 0;
         Timer update = new Timer(true);
         update.schedule(new TimerTask() {
             @Override
@@ -26,6 +29,7 @@ public abstract class Scheduler implements Runnable{
                         pcb.setWaitingTime(pcb.getWaitingTime() + 1);
                         pcb.setResponseRatio(((double) pcb.getWaitingTime() + pcb.getBurstTime()) / pcb.getBurstTime());
                     }
+                    currentTime++;
                 }
             }
         }, 0, PCB.period);
@@ -59,7 +63,9 @@ public abstract class Scheduler implements Runnable{
         }
         if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED){
             System.out.println("进程" + pcb.getId() + "运行完毕");
-            readyQueue.remove(pcb);
+            synchronized (readyQueue){
+                readyQueue.remove(pcb);
+            }
         }
 
     }
@@ -79,6 +85,43 @@ public abstract class Scheduler implements Runnable{
      * @name insertProcess
      * @returntype void
      **/
-    abstract void insertProcess(PCB pcb);
+    public void insertProcess(PCB pcb){
+        System.out.println("进程" + pcb.getId() + "插入");
+        //直接插入到末尾
+        addPCB(pcb);
+    }
 
+    /**
+     * @author lmio
+     * @description TODO 等待就绪队列不为空
+     * @time 1:41 2023/1/5
+     * @name waitReadyQueue
+     * @returntype void
+     **/
+    public void waitReadyQueue(){
+        while (readyQueue.isEmpty()){
+            // 循环等待10s，若队列仍然为空，退出调度器
+            synchronized (readyQueue){
+                try {
+                    readyQueue.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * @author lmio
+     * @description TODO 添加元素到就绪队列的末尾
+     * @time 1:41 2023/1/5
+     * @name addPCB
+     * @returntype void
+     **/
+    public void addPCB(PCB pcb){
+        synchronized (readyQueue){
+            readyQueue.add(pcb);
+            readyQueue.notify();
+        }
+    }
 }

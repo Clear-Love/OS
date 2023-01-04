@@ -48,13 +48,15 @@ public class MFQ_Schedule extends  Scheduler{
         for (int i = 0; i < levelNum; i++) {
             queues.add(new PCBlevelQueue(i));
         }
-        queues.get(0).pcbqueue = new LinkedList<>(readyQueue);
+        queues.get(0).pcbqueue = new LinkedList<>();
     }
 
     @Override
     public void schedule() {
-        int currentTime = 0;
-        while (!readyQueue.isEmpty()) {
+
+        while (true) {
+            //等待就绪队列不为空
+            waitReadyQueue();
             //找到运行队列
             PCBlevelQueue levelq = queues.get(0);
             for (PCBlevelQueue queue : queues) {
@@ -66,19 +68,18 @@ public class MFQ_Schedule extends  Scheduler{
                 }
             }
 
+            // 当前队列
             Queue<PCB> queue = levelq.pcbqueue;
+            int level = levelq.level;
             System.out.println("当前队列时间片：" + levelq.timeSlice);
             interrupt = new Timer(true);
             interrupt.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if(!readyQueue.isEmpty()){
+                    if(!queue.isEmpty()){
                         //终止正在运行的进程并把它添加到就绪队列的末尾
                         now.setStatus(PCB.ProcessStatus.READY);
-                        readyQueue.remove(0);
-                        readyQueue.add(now);
                     }
-
                 }
             },0, (long) levelq.timeSlice * PCB.period);
 
@@ -97,19 +98,16 @@ public class MFQ_Schedule extends  Scheduler{
                     queues.get(levelq.level+1 == levelNum ? levelNum:levelq.level+1).pcbqueue.add(now);
                 }
 
-                currentTime += now.getBurstTime() - now.getRemainingTime();
                 System.out.println("当前时间：" + currentTime);
             }
             interrupt.cancel();
         }
-        System.out.println("多级反馈队列调度算法演示结束");
-        System.out.println("-------------------------------------");
     }
 
     @Override
     public void insertProcess(PCB pcb) {
         System.out.println("进程" + pcb.getId() + "插入");
-        readyQueue.add(pcb);
+        addPCB(pcb);
         queues.get(0).pcbqueue.add(pcb);
     }
 
