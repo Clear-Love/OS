@@ -13,6 +13,7 @@ public class FF_MemoryAllocator extends variableMemoryAllocate{
 
     public FF_MemoryAllocator(int totalSize) {
         super(totalSize);
+        //按起始地址排序
         this.comparator = Comparator.comparingInt(p -> p.startAddress);
     }
 

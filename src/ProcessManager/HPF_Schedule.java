@@ -44,13 +44,20 @@ public class HPF_Schedule extends Scheduler{
             //将正在运行的进程转到就绪
             readyQueue.get(0).setStatus(PCB.ProcessStatus.READY);
             //插入到队列前面
-            addPCB(pcb);
+            synchronized (readyQueue){
+                readyQueue.add(0, pcb);
+                readyQueue.notify();
+            }
         }else {
             //用插入排序使就绪队列重新排序
             for (int i = readyQueue.size()-1; i >= 0; i--) {
                 int priority = readyQueue.get(i).getPriority();
                 if(newPriority < priority){
-                    addPCB(pcb);
+                    synchronized (readyQueue){
+                        readyQueue.add(i, pcb);
+                        readyQueue.notify();
+                        return;
+                    }
                 }
             }
         }

@@ -12,9 +12,9 @@ import java.util.Vector;
  * @version 1.0
  */
 public abstract class Scheduler implements Runnable{
-    public final Vector<PCB> readyQueue;
+    public final Vector<PCB> readyQueue; //就绪队列
 
-    public int currentTime;
+    public int currentTime; // 当前时间
 
     public Scheduler(Vector<PCB> pcbList) {
         readyQueue = pcbList;
@@ -100,7 +100,7 @@ public abstract class Scheduler implements Runnable{
      **/
     public void waitReadyQueue(){
         while (readyQueue.isEmpty()){
-            // 循环等待10s，若队列仍然为空，退出调度器
+            // 循环等待
             synchronized (readyQueue){
                 try {
                     readyQueue.wait();

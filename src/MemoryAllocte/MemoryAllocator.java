@@ -4,7 +4,7 @@ package MemoryAllocte;
  * @author lmio
  * @version 1.0
  * @time 2022/12/27 17:30
- * @description TODO 内存调度器接口
+ * @description TODO 内存调度器抽象类
  * @modified lmio
  */
 public abstract class MemoryAllocator {

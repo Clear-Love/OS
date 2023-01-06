@@ -87,5 +87,48 @@ public abstract class VirtualMemoryManager {
      * @name run
      * @returntype void
      **/
-    public abstract void run();
+    public void run() {
+        for (int pageNumber : pageSequence) {
+            // 如果内存中已经有了这个页面，则不需要进行缺页处理
+            if (memoryPages.containsKey(pageNumber)) {
+                System.out.println("页面" + pageNumber + "正常加载");
+                //访问次数加一
+                memoryPages.get(pageNumber).accessCount++;
+                continue;
+            }
+
+            // 如果内存中没有这个页面，则需要进行缺页处理
+            pageFaultCount++;
+            System.out.println("页面" + pageNumber + "发生缺页");
+
+            // 如果内存已满，则将内存中最先加入的页面淘汰出去
+            if (memoryPages.size() == Memory_PageNum) {
+                replace();
+            }
+
+            //加载页面到内存
+            loadPageFromDisk(pageNumber);
+
+            //访问次数加一
+            memoryPages.get(pageNumber).accessCount++;
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        // 输出缺页的总次数
+        System.out.println("Total page faults: " + pageFaultCount);
+        System.out.println("缺页率：" + (double)pageFaultCount/pageSequence.size());
+    }
+
+    /**
+     * @author lmio
+     * @description TODO 页面置换,选择一个页面移出内存
+     * @time 21:39 2023/1/5
+     * @name replace
+     * @returntype void
+     **/
+    abstract void replace();
 }

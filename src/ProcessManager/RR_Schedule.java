@@ -1,5 +1,6 @@
 package ProcessManager;
 
+import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -29,6 +30,7 @@ public class RR_Schedule extends Scheduler{
     public RR_Schedule(Vector<PCB> pcbList) {
         super(pcbList);
         interrupt = new Timer(true);
+        readyQueue.sort(Comparator.comparingInt(PCB::getArrivalTime));
     }
 
 
@@ -38,13 +40,13 @@ public class RR_Schedule extends Scheduler{
         interrupt.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(!readyQueue.isEmpty()){
-                    //终止正在运行的进程并把它添加到就绪队列的末尾
-                    PCB pcb = readyQueue.get(0);
-                    pcb.setStatus(PCB.ProcessStatus.READY);
-                    readyQueue.remove(0);
-                    readyQueue.add(pcb);
-                }
+            if(!readyQueue.isEmpty()){
+                //终止正在运行的进程并把它添加到就绪队列的末尾
+                PCB pcb = readyQueue.get(0);
+                pcb.setStatus(PCB.ProcessStatus.READY);
+                readyQueue.remove(0);
+                readyQueue.add(pcb);
+            }
 
             }
         },0, timeSlice* 500L);

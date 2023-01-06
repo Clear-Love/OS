@@ -14,11 +14,11 @@ public class FCFS_Schedule extends Scheduler{
 
     public FCFS_Schedule(Vector<PCB> pcbList) {
         super(pcbList);
+        readyQueue.sort(Comparator.comparingInt(PCB::getArrivalTime));
     }
 
     @Override
     public void schedule() {
-        readyQueue.sort(Comparator.comparingInt(PCB::getArrivalTime));
         // 遍历就绪队列中的所有进程
         while(true){
             waitReadyQueue();

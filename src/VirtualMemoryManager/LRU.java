@@ -39,36 +39,13 @@ public class LRU extends VirtualMemoryManager {
 
             // 如果内存已满，则将内存中最先加入的页面淘汰出去
             if (memoryPages.size() == Memory_PageNum) {
-                System.out.println("内存已满，启用LRU置换算法");
-
-                // 最近最久未使用的页面即队列头
-                int evictedPageNumber = prevPages.get(0);
-                Page evictedPage = memoryPages.get(evictedPageNumber);
-
-                // 若页面修改过，将该页写回磁盘
-                if(evictedPage.modified){
-                    evictedPage.modified = false;
-                    diskPages.remove(evictedPageNumber);
-                    diskPages.put(evictedPageNumber, evictedPage);
-                }
-
-                // 维护prev链表
-                prevPages.remove(0);
-
-                // 从内存中删除被淘汰的页面
-                memoryPages.remove(evictedPageNumber);
-
-                // 从磁盘中加载页面到内存中
-                loadPageFromDisk(pageNumber);
-
-                // 输出每次淘汰的页面号
-                System.out.println("Evicted page: " + evictedPageNumber);
+                replace();
             }
 
             //最近访问了这个页面，直接放入队列末尾
             prevPages.add(pageNumber);
 
-            //直接加载页面到内存
+            //加载页面到内存
             loadPageFromDisk(pageNumber);
 
             //访问次数加一
@@ -83,5 +60,30 @@ public class LRU extends VirtualMemoryManager {
         // 输出缺页的总次数
         System.out.println("Total page faults: " + pageFaultCount);
         System.out.println("缺页率：" + (double)pageFaultCount/pageSequence.size());
+    }
+
+    @Override
+    void replace() {
+        System.out.println("内存已满，启用LRU置换算法");
+
+        // 最近最久未使用的页面即队列头
+        int evictedPageNumber = prevPages.get(0);
+        Page evictedPage = memoryPages.get(evictedPageNumber);
+
+        // 若页面修改过，将该页写回磁盘
+        if(evictedPage.modified){
+            evictedPage.modified = false;
+            diskPages.remove(evictedPageNumber);
+            diskPages.put(evictedPageNumber, evictedPage);
+        }
+
+        // 维护prev链表
+        prevPages.remove(0);
+
+        // 从内存中删除被淘汰的页面
+        memoryPages.remove(evictedPageNumber);
+
+        // 输出每次淘汰的页面号
+        System.out.println("Evicted page: " + evictedPageNumber);
     }
 }
