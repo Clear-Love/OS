@@ -42,10 +42,9 @@ public class RR_Schedule extends Scheduler{
             public void run() {
             if(!readyQueue.isEmpty()){
                 //终止正在运行的进程并把它添加到就绪队列的末尾
-                PCB pcb = readyQueue.get(0);
-                pcb.setStatus(PCB.ProcessStatus.READY);
+                nowProcess.setStatus(PCB.ProcessStatus.READY);
                 readyQueue.remove(0);
-                readyQueue.add(pcb);
+                readyQueue.add(nowProcess);
             }
 
             }

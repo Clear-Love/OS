@@ -13,8 +13,6 @@ public class MFQ_Schedule extends  Scheduler{
     //队列数，默认为3
     private int levelNum = 3;
     private final List<PCBlevelQueue> queues;
-
-    private PCB now;
     Timer interrupt;
     public int getLevelNum() {
         return levelNum;
@@ -78,7 +76,7 @@ public class MFQ_Schedule extends  Scheduler{
                 public void run() {
                     if(!queue.isEmpty()){
                         //终止正在运行的进程并把它添加到就绪队列的末尾
-                        now.setStatus(PCB.ProcessStatus.READY);
+                        nowProcess.setStatus(PCB.ProcessStatus.READY);
                     }
                 }
             },0, (long) levelq.timeSlice * PCB.period);
@@ -86,7 +84,7 @@ public class MFQ_Schedule extends  Scheduler{
             // 循环调度就绪队列中的进程
             while (!queue.isEmpty()) {
                 // 取出就绪队列中的第一个进程
-                now = queue.peek();
+                PCB now = queue.peek();
 
                 //开启进程
                 PCB_start(now);
@@ -95,7 +93,7 @@ public class MFQ_Schedule extends  Scheduler{
                 if(now.getStatus() == PCB.ProcessStatus.READY){
                     //若在固定时间片内未完成，添加到下一级的末尾
                     System.out.println("进程" + now.getId() + "未在固定的时间片内完成，加入下级队列");
-                    queues.get(levelq.level+1 == levelNum ? levelNum:levelq.level+1).pcbqueue.add(now);
+                    queues.get(Math.min(levelq.level + 1, levelNum-1)).pcbqueue.add(now);
                 }
 
                 System.out.println("当前时间：" + currentTime);

@@ -15,12 +15,7 @@ import java.util.*;
 public class ProcessTest {
     public static void main(String[] args) {
 
-        schedule_start(new FCFS_Schedule(new Vector<>()));
-//        schedule_start(new HPF_Schedule(new Vector<>()));
-//        schedule_start(new HRRN_Schedule(new Vector<>()));
-//        schedule_start(new RR_Schedule(new Vector<>()));
-//        schedule_start(new SJF_Schedule(new Vector<>()));
-//        schedule_start(new MFQ_Schedule(new Vector<>()));
+        schedule_start(new HRRN_Schedule(new Vector<>()));
 
     }
 

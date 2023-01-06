@@ -39,7 +39,7 @@ public class SCAN extends DiskScheduler{
      * @returntype int
      **/
     int requestVal(){
-        // 使用二分查找找到小与等于目标值的最大值
+        // 使用二分查找找到小于等于目标值的最大值
         int left = 0;
         int right = requestSequence.size() - 1;
         while(left < right){

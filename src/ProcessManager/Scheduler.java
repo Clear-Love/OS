@@ -14,6 +14,8 @@ import java.util.Vector;
 public abstract class Scheduler implements Runnable{
     public final Vector<PCB> readyQueue; //就绪队列
 
+    public PCB nowProcess;
+
     public int currentTime; // 当前时间
 
     public Scheduler(Vector<PCB> pcbList) {
@@ -45,6 +47,7 @@ public abstract class Scheduler implements Runnable{
      * @returntype void
      **/
     public void PCB_start(PCB pcb){
+        nowProcess = pcb;
         // 启动进程
         Thread thread = new Thread(pcb);
         thread.setDaemon(true);

@@ -37,12 +37,13 @@ public class HPF_Schedule extends Scheduler{
         System.out.println("进程" + pcb.getId() + "插入");
         int newPriority = pcb.getPriority();
         if(readyQueue.isEmpty()){
+            nowProcess = pcb;
             addPCB(pcb);
             return;
         }
         if(newPriority > readyQueue.get(0).getPriority()){
             //将正在运行的进程转到就绪
-            readyQueue.get(0).setStatus(PCB.ProcessStatus.READY);
+            nowProcess.setStatus(PCB.ProcessStatus.READY);
             //插入到队列前面
             synchronized (readyQueue){
                 readyQueue.add(0, pcb);
@@ -65,7 +66,7 @@ public class HPF_Schedule extends Scheduler{
 
     @Override
     public void run() {
-        System.out.println("短作业优先调度器运行");
+        System.out.println("最高优先级调度器运行");
         schedule();
     }
 }

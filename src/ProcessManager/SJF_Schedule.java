@@ -42,12 +42,13 @@ public class SJF_Schedule extends Scheduler{
         int newTime = pcb.getBurstTime();
         // 若就绪队列为空 直接插入到队列末尾
         if(readyQueue.isEmpty()){
+            nowProcess = pcb;
             addPCB(pcb);
             return;
         }
-        if(newTime < readyQueue.get(0).getBurstTime()){
+        if(newTime < nowProcess.getBurstTime()){
             //将正在运行的进程转到就绪
-            readyQueue.get(0).setStatus(PCB.ProcessStatus.READY);
+            nowProcess.setStatus(PCB.ProcessStatus.READY);
             synchronized (readyQueue){
                 readyQueue.add(0, pcb);
                 readyQueue.notify();
