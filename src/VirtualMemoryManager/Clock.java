@@ -72,7 +72,6 @@ public class Clock extends VirtualMemoryManager{
 
     @Override
     void replace() {
-        System.out.println("内存已满，启用LRU置换算法");
 
         // 找到第一个最近未访问的
         while(f[clock_point]) {

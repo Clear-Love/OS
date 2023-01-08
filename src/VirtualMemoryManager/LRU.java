@@ -21,7 +21,6 @@ public class LRU extends VirtualMemoryManager {
     @Override
     public void run() {
         for (int pageNumber : pageSequence) {
-
             // 如果内存中已经有了这个页面，则不需要进行缺页处理
             if (memoryPages.containsKey(pageNumber)) {
                 System.out.println("页面" + pageNumber + "正常加载");

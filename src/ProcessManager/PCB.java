@@ -13,9 +13,9 @@ public class PCB implements Runnable{
     public static int period = 500; //无实际作用，用于模拟进程运行的等待时间，进程信息的更新周期
     private final int id;  // 进程ID
     private final String name;  // 进程名称
-    private int priority;  // 进程优先级
+    private final int priority;  // 进程优先级
     private final int arrivalTime;  // 进程到达时间
-    private int burstTime;  // 进程需要的时间片
+    private final int burstTime;  // 进程需要的时间片
     private int remainingTime;  // 进程剩余的时间片
     private int waitingTime;  // 进程等待时间
     private ProcessStatus status;  // 进程状态
@@ -48,26 +48,11 @@ public class PCB implements Runnable{
         return priority;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
     public int getArrivalTime() {
         return arrivalTime;
     }
 
 
-    public int getBurstTime() {
-        return burstTime;
-    }
-
-    public synchronized void setBurstTime(int burstTime) {
-        this.burstTime = burstTime;
-    }
-
-    public int getRemainingTime() {
-        return remainingTime;
-    }
 
 
     public int getWaitingTime() {
@@ -129,7 +114,7 @@ public class PCB implements Runnable{
     @Override
     public String toString() {
         return "id=" + id +
-                "\tname='" + name +
+                "\tname=" + name +
                 "\t到达时间：" + arrivalTime +
                 "\t运行时间：" + burstTime +
                 "\t完成时间" + finishTime;

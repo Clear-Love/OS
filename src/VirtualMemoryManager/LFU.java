@@ -17,7 +17,6 @@ public class LFU extends VirtualMemoryManager{
 
     @Override
     void replace() {
-        System.out.println("内存已满，启用最不常用置换算法");
         // 使用迭代器遍历散列表
         Iterator<Map.Entry<Integer, Page>> iterator = memoryPages.entrySet().iterator();
         Map.Entry<Integer, Page> entry = iterator.next();
