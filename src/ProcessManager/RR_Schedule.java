@@ -57,8 +57,6 @@ public class RR_Schedule extends Scheduler{
 
             //开启进程
             PCB_start(pcb);
-
-            System.out.println("当前时间：" + currentTime);
         }
     }
 

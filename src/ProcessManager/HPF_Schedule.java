@@ -27,14 +27,11 @@ public class HPF_Schedule extends Scheduler{
 
             // 启动进程
             PCB_start(pcb);
-
-            System.out.println("当前时间：" + currentTime);
         }
     }
 
     @Override
     public void insertProcess(PCB pcb) {
-        System.out.println("进程" + pcb.getId() + "插入");
         int newPriority = pcb.getPriority();
         if(readyQueue.isEmpty()){
             nowProcess = pcb;

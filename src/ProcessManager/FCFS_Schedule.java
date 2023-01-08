@@ -24,7 +24,6 @@ public class FCFS_Schedule extends Scheduler{
             waitReadyQueue();
             PCB pcb = readyQueue.get(0);
             PCB_start(pcb);
-            System.out.println("当前时间：" + currentTime);
         }
     }
 

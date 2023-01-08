@@ -28,15 +28,10 @@ public class HRRN_Schedule extends Scheduler{
                 }
                 return -1;
             });
-            for (PCB pcb : readyQueue) {
-                System.out.print(pcb.getName() + "响应比：" + pcb.getResponseRatio() +"\t");
-            }
             System.out.println('\n');
             PCB maxPcb = readyQueue.get(0);
 
             PCB_start(maxPcb);
-
-            System.out.println("当前时间：" + currentTime);
         }
 
     }

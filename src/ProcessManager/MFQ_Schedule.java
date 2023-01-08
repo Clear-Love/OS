@@ -69,7 +69,6 @@ public class MFQ_Schedule extends  Scheduler{
             // 当前队列
             Queue<PCB> queue = levelq.pcbqueue;
             int level = levelq.level;
-            System.out.println("当前队列时间片：" + levelq.timeSlice);
             interrupt = new Timer(true);
             interrupt.schedule(new TimerTask() {
                 @Override
@@ -92,11 +91,8 @@ public class MFQ_Schedule extends  Scheduler{
                 queue.poll();
                 if(now.getStatus() == PCB.ProcessStatus.READY){
                     //若在固定时间片内未完成，添加到下一级的末尾
-                    System.out.println("进程" + now.getId() + "未在固定的时间片内完成，加入下级队列");
                     queues.get(Math.min(levelq.level + 1, levelNum-1)).pcbqueue.add(now);
                 }
-
-                System.out.println("当前时间：" + currentTime);
             }
             interrupt.cancel();
         }
@@ -104,7 +100,6 @@ public class MFQ_Schedule extends  Scheduler{
 
     @Override
     public void insertProcess(PCB pcb) {
-        System.out.println("进程" + pcb.getId() + "插入");
         addPCB(pcb);
         queues.get(0).pcbqueue.add(pcb);
     }

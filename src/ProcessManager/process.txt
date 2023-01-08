@@ -1,0 +1,11 @@
+1 process1 3 0 5
+2 process2 5 2 4
+3 process3 1 5 3
+4 process4 4 8 5
+5 process5 2 10 2
+6 process6 3 11 6
+7 process7 5 15 4
+8 process8 2 17 5
+9 process9 4 20 5
+10 process10 1 25 2
+11 process11 8 30 6

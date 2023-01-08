@@ -1,8 +1,12 @@
 package ProcessManager;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * @author lmio
@@ -61,14 +65,13 @@ public abstract class Scheduler implements Runnable{
         }
 
         // 从就绪队列中移除进程
-        if(pcb.getStatus() == PCB.ProcessStatus.READY){
-            System.out.println("进程" + pcb.getId() + "被中断");
-        }
         if(pcb.getStatus() == PCB.ProcessStatus.TERMINATED){
-            System.out.println("进程" + pcb.getId() + "运行完毕");
             synchronized (readyQueue){
                 readyQueue.remove(pcb);
             }
+            pcb.finishTime = currentTime;
+            // 运行结束写入日志
+            logPcocess(pcb);
         }
 
     }
@@ -89,7 +92,6 @@ public abstract class Scheduler implements Runnable{
      * @returntype void
      **/
     public void insertProcess(PCB pcb){
-        System.out.println("进程" + pcb.getId() + "插入");
         //直接插入到末尾
         addPCB(pcb);
     }
@@ -126,5 +128,22 @@ public abstract class Scheduler implements Runnable{
             readyQueue.add(pcb);
             readyQueue.notify();
         }
+    }
+
+    public void logPcocess(PCB pcb){
+        Logger logger = Logger.getLogger("MyLog");
+        FileHandler fh;
+
+        try {
+            // 设置日志文件的路径和文件名
+            fh = new FileHandler("src/ProcessManager/sche.log");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+        } catch (SecurityException | IOException e) {
+            e.printStackTrace();
+        }
+
+        logger.info(pcb.toString());
     }
 }

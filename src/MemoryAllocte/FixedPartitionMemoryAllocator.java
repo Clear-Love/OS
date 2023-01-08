@@ -50,6 +50,7 @@ public class FixedPartitionMemoryAllocator extends MemoryAllocator{
             System.out.println("释放内存块失败");
             return;
         }
+        freedBlock.setWorkName("");
         freedBlock.allocated = false;
         freeList.insert(freedBlock);
     }
